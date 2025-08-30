@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Your Name — 3D Portfolio</title>
+  <meta name="description" content="A sleek 3D personal portfolio built with Tailwind CSS and Three.js" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Outfit', 'ui-sans-serif', 'system-ui'] },
+          colors: {
+            brand: {
+              50: '#eef7ff', 100: '#d9edff', 200: '#baddff', 300: '#8cc7ff', 400: '#59a7ff',
+              500: '#2a82ff', 600: '#1566e6', 700: '#0f4fb4', 800: '#0e4494', 900: '#103b78'
+            }
+          },
+          boxShadow: {
+            glow: '0 0 40px rgba(59,130,246,.35)',
+          },
+          keyframes: {
+            float: {
+              '0%, 100%': { transform: 'translateY(0px)' },
+              '50%': { transform: 'translateY(-10px)' }
+            }
+          },
+          animation: { float: 'float 4s ease-in-out infinite' }
+        }
+      },
+      darkMode: 'class'
+    }
+  </script>
+  <style>
+    /* Hide the WebGL canvas overflow */
+    #heroCanvas { position:absolute; inset:0; display:block; }
+    .glass { background: linear-gradient(180deg, rgba(255,255,255,.12), rgba(255,255,255,.06)); backdrop-filter: blur(10px); }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-200 selection:bg-brand-400/40">
+  <!-- NAVBAR -->
+  <header class="fixed top-0 inset-x-0 z-40">
+    <nav class="mx-auto max-w-7xl p-4">
+      <div class="flex items-center justify-between rounded-2xl glass border border-white/10 px-4 py-2">
+        <a href="#home" class="flex items-center gap-3">
+          <div class="size-9 rounded-xl bg-gradient-to-br from-brand-400 to-brand-700 grid place-items-center shadow-glow">
+            <span class="font-extrabold">Y</span>
+          </div>
+          <span class="font-semibold">Your Name</span>
+        </a>
+        <div class="hidden md:flex items-center gap-6">
+          <a href="#about" class="hover:text-brand-300">About</a>
+          <a href="#skills" class="hover:text-brand-300">Skills</a>
+          <a href="#projects" class="hover:text-brand-300">Projects</a>
+          <a href="#contact" class="hover:text-brand-300">Contact</a>
+          <button id="themeBtn" class="rounded-xl border border-white/10 px-3 py-1 hover:bg-white/5" aria-label="Toggle theme">🌓</button>
+        </div>
+        <button id="menuBtn" class="md:hidden rounded-xl border border-white/10 px-3 py-1" aria-label="Open menu">☰</button>
+      </div>
+      <div id="mobileMenu" class="md:hidden mt-2 hidden rounded-2xl glass border border-white/10 p-3">
+        <a href="#about" class="block rounded-xl px-3 py-2 hover:bg-white/5">About</a>
+        <a href="#skills" class="block rounded-xl px-3 py-2 hover:bg-white/5">Skills</a>
+        <a href="#projects" class="block rounded-xl px-3 py-2 hover:bg-white/5">Projects</a>
+        <a href="#contact" class="block rounded-xl px-3 py-2 hover:bg-white/5">Contact</a>
+        <button id="themeBtnM" class="mt-2 w-full rounded-xl border border-white/10 px-3 py-2 hover:bg-white/5">Toggle theme</button>
+      </div>
+    </nav>
+  </header>
+
+  <!-- HERO with 3D background -->
+  <section id="home" class="relative min-h-screen overflow-hidden">
+    <canvas id="heroCanvas" aria-hidden="true"></canvas>
+    <div class="relative z-10 mx-auto max-w-7xl px-6 pt-40 pb-24 grid md:grid-cols-2 items-center gap-10">
+      <div>
+        <span class="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs">✨ Open to work • Frontend / 3D</span>
+        <h1 class="mt-5 text-4xl md:text-6xl font-extrabold leading-tight">
+          Hi, I'm <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-400 to-brand-700">Your Name</span> 👋
+        </h1>
+        <p class="mt-4 text-slate-300/90 max-w-xl">I craft delightful web experiences with clean UI, smooth 3D, and a sprinkle of motion. Based in Your City, I love building fast, accessible apps.</p>
+        <div class="mt-8 flex flex-wrap items-center gap-3">
+          <a href="#projects" class="rounded-2xl bg-brand-500 hover:bg-brand-600 px-5 py-3 font-semibold shadow-glow">View Projects</a>
+          <a href="#contact" class="rounded-2xl border border-white/10 px-5 py-3 font-semibold hover:bg-white/5">Contact Me</a>
+        </div>
+        <div class="mt-10 flex flex-wrap gap-3">
+          <span class="rounded-xl border border-white/10 px-3 py-1 animate-float">HTML</span>
+          <span class="rounded-xl border border-white/10 px-3 py-1 [animation-delay:.4s] animate-float">CSS</span>
+          <span class="rounded-xl border border-white/10 px-3 py-1 [animation-delay:.8s] animate-float">JavaScript</span>
+          <span class="rounded-xl border border-white/10 px-3 py-1 [animation-delay:1.2s] animate-float">React</span>
+          <span class="rounded-xl border border-white/10 px-3 py-1 [animation-delay:1.6s] animate-float">Three.js</span>
+          <span class="rounded-xl border border-white/10 px-3 py-1 [animation-delay:2s] animate-float">Tailwind</span>
+        </div>
+      </div>
+      <div class="relative">
+        <div class="rounded-3xl border border-white/10 glass p-6 shadow-glow">
+          <div class="aspect-square rounded-2xl bg-black/30 border border-white/10 grid place-items-center text-center">
+            <p class="px-6 text-sm text-slate-300">3D scene runs in the background. Replace this card with your photo, a lottie, or stats.</p>
+          </div>
+          <div class="mt-4 grid grid-cols-3 gap-3 text-center text-xs">
+            <div class="rounded-xl border border-white/10 p-3">
+              <div class="text-2xl font-extrabold">4+</div>
+              <div>Projects</div>
+            </div>
+            <div class="rounded-xl border border-white/10 p-3">
+              <div class="text-2xl font-extrabold">2</div>
+              <div>Years</div>
+            </div>
+            <div class="rounded-xl border border-white/10 p-3">
+              <div class="text-2xl font-extrabold">100%</div>
+              <div>Passion</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 text-xs opacity-80">Scroll</div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about" class="relative py-24">
+    <div class="mx-auto max-w-7xl px-6">
+      <h2 class="text-3xl md:text-4xl font-extrabold">About</h2>
+      <p class="mt-4 max-w-3xl text-slate-300/90">I'm a developer focused on building performant, accessible, and visually rich interfaces. I enjoy pushing pixels and polygons with equal love for code quality and design systems.</p>
+      <div class="mt-10 grid md:grid-cols-3 gap-6">
+        <div class="rounded-2xl border border-white/10 glass p-6">
+          <h3 class="font-semibold">What I do</h3>
+          <p class="mt-2 text-slate-300/90">Frontend, creative coding, 3D on the web, UI prototyping, animations and micro-interactions.</p>
+        </div>
+        <div class="rounded-2xl border border-white/10 glass p-6">
+          <h3 class="font-semibold">How I work</h3>
+          <p class="mt-2 text-slate-300/90">Design-first. Accessibility-minded. Ship fast, iterate faster. Pragmatic with a love for polish.</p>
+        </div>
+        <div class="rounded-2xl border border-white/10 glass p-6">
+          <h3 class="font-semibold">Currently learning</h3>
+          <p class="mt-2 text-slate-300/90">Shaders (GLSL), advanced Three.js patterns, and performance profiling for motion-heavy UIs.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section id="skills" class="relative py-24 bg-gradient-to-b from-slate-950 to-slate-900/50">
+    <div class="mx-auto max-w-7xl px-6">
+      <h2 class="text-3xl md:text-4xl font-extrabold">Skills</h2>
+      <div class="mt-8 grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Skill Card -->
+        <div class="rounded-2xl border border-white/10 glass p-6">
+          <div class="font-semibold">UI / UX</div>
+          <p class="mt-2 text-slate-300/90">Wireframing, design systems, prototyping, usability.</p>
+        </div>
+        <div class="rounded-2xl border border-white/10 glass p-6">
+          <div class="font-semibold">Frontend</div>
+          <p class="mt-2 text-slate-300/90">React, Vite, Next.js basics, state management, REST/GraphQL.</p>
+        </div>
+        <div class="rounded-2xl border border-white/10 glass p-6">
+          <div class="font-semibold">3D / Motion</div>
+          <p class="mt-2 text-slate-300/90">Three.js, GSAP basics, scroll-based storytelling, WebGL.</p>
+        </div>
+        <div class="rounded-2xl border border-white/10 glass p-6">
+          <div class="font-semibold">Testing / Perf</div>
+          <p class="mt-2 text-slate-300/90">Lighthouse, vitest/jest basics, a11y checks, code reviews.</p>
+        </div>
+        <div class="rounded-2xl border border-white/10 glass p-6">
+          <div class="font-semibold">Tooling</div>
+          <p class="mt-2 text-slate-300/90">Git/GitHub, Tailwind, Prettier/ESLint, Figma.</p>
+        </div>
+        <div class="rounded-2xl border border-white/10 glass p-6">
+          <div class="font-semibold">Plus</div>
+          <p class="mt-2 text-slate-300/90">Docs, teamwork, curiosity, and product thinking.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section id="projects" class="relative py-24">
+    <div class="mx-auto max-w-7xl px-6">
+      <div class="flex items-end justify-between gap-4">
+        <h2 class="text-3xl md:text-4xl font-extrabold">Projects</h2>
+        <div class="text-sm opacity-80">More on GitHub →</div>
+      </div>
+      <div class="mt-8 grid md:grid-cols-3 gap-6">
+        <!-- Project Card -->
+        <article class="group rounded-2xl border border-white/10 glass p-4 hover:shadow-glow transition">
+          <div class="aspect-video rounded-xl bg-black/30 border border-white/10 grid place-items-center">Hero 3D</div>
+          <div class="mt-4 flex items-center justify-between">
+            <h3 class="font-semibold">3D Portfolio</h3>
+            <span class="text-xs rounded-full border border-white/10 px-2 py-0.5">Three.js</span>
+          </div>
+          <p class="mt-2 text-sm text-slate-300/90">A smooth WebGL hero with particles and a rotating object, built with Tailwind + Three.js.</p>
+        </article>
+        <article class="group rounded-2xl border border-white/10 glass p-4 hover:shadow-glow transition">
+          <div class="aspect-video rounded-xl bg-black/30 border border-white/10 grid place-items-center">UI</div>
+          <div class="mt-4 flex items-center justify-between">
+            <h3 class="font-semibold">Design System</h3>
+            <span class="text-xs rounded-full border border-white/10 px-2 py-0.5">Tailwind</span>
+          </div>
+          <p class="mt-2 text-sm text-slate-300/90">Reusable components, tokens, and accessible patterns for faster shipping.</p>
+        </article>
+        <article class="group rounded-2xl border border-white/10 glass p-4 hover:shadow-glow transition">
+          <div class="aspect-video rounded-xl bg-black/30 border border-white/10 grid place-items-center">Game</div>
+          <div class="mt-4 flex items-center justify-between">
+            <h3 class="font-semibold">Mini Web Game</h3>
+            <span class="text-xs rounded-full border border-white/10 px-2 py-0.5">Canvas</span>
+          </div>
+          <p class="mt-2 text-sm text-slate-300/90">A tiny arcade built with HTML canvas, focusing on juice and feel.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact" class="relative py-24 bg-gradient-to-b from-slate-900/50 to-slate-950">
+    <div class="mx-auto max-w-7xl px-6">
+      <h2 class="text-3xl md:text-4xl font-extrabold">Contact</h2>
+      <div class="mt-6 grid md:grid-cols-2 gap-6">
+        <form class="rounded-2xl border border-white/10 glass p-6" onsubmit="event.preventDefault(); openMail();">
+          <div class="grid md:grid-cols-2 gap-4">
+            <label class="text-sm">Name
+              <input id="name" class="mt-1 w-full rounded-xl bg-black/30 border border-white/10 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-500" required />
+            </label>
+            <label class="text-sm">Email
+              <input id="email" type="email" class="mt-1 w-full rounded-xl bg-black/30 border border-white/10 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-500" required />
+            </label>
+          </div>
+          <label class="text-sm block mt-4">Message
+            <textarea id="message" rows="4" class="mt-1 w-full rounded-xl bg-black/30 border border-white/10 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-500" required></textarea>
+          </label>
+          <div class="mt-4 flex gap-3">
+            <button class="rounded-2xl bg-brand-500 hover:bg-brand-600 px-5 py-3 font-semibold shadow-glow" type="submit">Send Email</button>
+            <a id="waLink" class="rounded-2xl border border-white/10 px-5 py-3 font-semibold hover:bg-white/5" target="_blank">WhatsApp</a>
+          </div>
+        </form>
+        <div class="rounded-2xl border border-white/10 glass p-6">
+          <h3 class="font-semibold">Let's work together</h3>
+          <p class="mt-2 text-slate-300/90">Tell me about your idea. I'm available for freelance and internships. Prefer email or WhatsApp for a quick reply.</p>
+          <ul class="mt-4 space-y-2 text-sm">
+            <li>📩 <a id="emailText" href="mailto:you@example.com" class="underline decoration-dotted">you@example.com</a></li>
+            <li>📞 <a id="phoneText" href="tel:+910000000000" class="underline decoration-dotted">+91 00000 00000</a></li>
+            <li>💼 <a href="#" class="underline decoration-dotted">github.com/yourhandle</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="py-10 text-center text-xs opacity-70">© <span id="year"></span> Your Name. Built with Tailwind & Three.js.</footer>
+
+  <!-- Three.js -->
+  <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/examples/js/controls/OrbitControls.js"></script>
+  <script>
+    // ========================
+    // Mobile menu + theme
+    // ========================
+    const menuBtn = document.getElementById('menuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    menuBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'))
+
+    const html = document.documentElement;
+    const themeBtn = document.getElementById('themeBtn');
+    const themeBtnM = document.getElementById('themeBtnM');
+    const setTheme = (t) => { localStorage.setItem('theme', t); html.classList.toggle('dark', t==='dark'); document.body.classList.toggle('bg-white', t==='light'); document.body.classList.toggle('text-slate-900', t==='light'); };
+    const initTheme = () => { const t = localStorage.getItem('theme') || 'dark'; setTheme(t); };
+    [themeBtn, themeBtnM].forEach(btn => btn?.addEventListener('click', () => setTheme(html.classList.contains('dark') ? 'light' : 'dark')));
+    initTheme();
+
+    // ========================
+    // Contact helpers
+    // ========================
+    const emailAddress = 'you@example.com'; // <-- EDIT ME
+    const phoneNumber = '+919999999999';    // <-- EDIT ME (international format)
+    document.getElementById('emailText').href = `mailto:${emailAddress}`;
+    document.getElementById('emailText').textContent = emailAddress;
+    document.getElementById('phoneText').href = `tel:${phoneNumber}`;
+    document.getElementById('phoneText').textContent = phoneNumber.replace('+91', '+91 ');
+
+    function openMail(){
+      const name = document.getElementById('name').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const message = document.getElementById('message').value.trim();
+      const subject = encodeURIComponent(`Portfolio contact from ${name}`);
+      const body = encodeURIComponent(`From: ${name} <${email}>\n\n${message}`);
+      window.location.href = `mailto:${emailAddress}?subject=${subject}&body=${body}`;
+    }
+    const wa = document.getElementById('waLink');
+    wa.href = `https://wa.me/${phoneNumber.replace(/[^\d]/g,'')}?text=${encodeURIComponent('Hello! I saw your portfolio and would love to chat.')}`;
+
+    // ========================
+    // Year
+    // ========================
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // ========================
+    // THREE.JS — pretty hero background
+    // ========================
+    const canvas = document.getElementById('heroCanvas');
+    const scene = new THREE.Scene();
+    scene.fog = new THREE.Fog(0x04060a, 60, 140);
+
+    const camera = new THREE.PerspectiveCamera(60, innerWidth/innerHeight, 0.1, 500);
+    camera.position.set(0, 0.6, 6);
+
+    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+    renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+    renderer.setSize(innerWidth, innerHeight);
+
+    // Lights
+    const ambient = new THREE.AmbientLight(0xffffff, 0.6); scene.add(ambient);
+    const dir = new THREE.DirectionalLight(0x89b4ff, 1.2); dir.position.set(3,4,2); scene.add(dir);
+
+    // Star field
+    const starGeo = new THREE.BufferGeometry();
+    const starCount = 1200;
+    const positions = new Float32Array(starCount * 3);
+    for(let i=0;i<starCount;i++){
+      positions[i*3+0] = (Math.random()-0.5)*100;
+      positions[i*3+1] = (Math.random()-0.2)*60;
+      positions[i*3+2] = (Math.random()-0.5)*100;
+    }
+    starGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    const starMat = new THREE.PointsMaterial({ size: 0.06, color: 0x77aaff, transparent: true, opacity: 0.8 });
+    const stars = new THREE.Points(starGeo, starMat);
+    scene.add(stars);
+
+    // Main object — torus knot
+    const knotGeo = new THREE.TorusKnotGeometry(1.1, 0.36, 180, 32);
+    const knotMat = new THREE.MeshStandardMaterial({ color: 0x2a82ff, metalness: 0.45, roughness: 0.2, envMapIntensity: 1 });
+    const knot = new THREE.Mesh(knotGeo, knotMat);
+    scene.add(knot);
+
+    // Floating cubes for "skills" vibe
+    const cubes = [];
+    for(let i=0;i<8;i++){
+      const g = new THREE.BoxGeometry(0.25,0.25,0.25);
+      const m = new THREE.MeshStandardMaterial({ color: 0xffffff, metalness: 0.2, roughness: 0.6 });
+      const cube = new THREE.Mesh(g,m);
+      cube.position.set((Math.random()-0.5)*6, (Math.random()*2)+0.5, (Math.random()-0.5)*6);
+      cube.userData.offset = Math.random()*Math.PI*2;
+      scene.add(cube); cubes.push(cube);
+    }
+
+    // Subtle controls (disabled interactions, just auto-rotate look)
+    const controls = new THREE.OrbitControls(camera, renderer.domElement);
+    controls.enableZoom = false; controls.enablePan = false; controls.enableRotate = false;
+
+    let t = 0;
+    function animate(){
+      requestAnimationFrame(animate);
+      t += 0.01;
+      knot.rotation.x += 0.004;
+      knot.rotation.y += 0.006;
+      stars.rotation.y += 0.0008;
+      cubes.forEach((c, i)=>{
+        c.position.y += Math.sin(t + c.userData.offset) * 0.003;
+        c.rotation.x += 0.01; c.rotation.y -= 0.008;
+      })
+      renderer.render(scene, camera);
+    }
+    animate();
+
+    function onResize(){
+      camera.aspect = innerWidth/innerHeight; camera.updateProjectionMatrix();
+      renderer.setSize(innerWidth, innerHeight);
+    }
+    addEventListener('resize', onResize);
+
+    // Perf: pause render offscreen
+    let visible = true;
+    document.addEventListener('visibilitychange', ()=>{ visible = !document.hidden; if(visible) animate(); });
+  </script>
+</body>
+</html>
